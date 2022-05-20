@@ -65,16 +65,16 @@ class _StatusUpdateScreen extends State<StatusUpdate>
 
   Widget statusQuery(context) {
     final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(link: widget.url, cache: InMemoryCache()),
+      GraphQLClient(link: widget.url, cache: GraphQLCache()),
     );
 
     return GraphQLProvider(
       client: client,
       child: Query(
-        options: QueryOptions(documentNode: gql(_buildQuery())),
+        options: QueryOptions(document: gql(_buildQuery())),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
-          if (result.loading) {
+          if (result.isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );

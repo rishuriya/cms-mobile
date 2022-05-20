@@ -45,11 +45,11 @@ class UpdateProfileScreen extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     final theme = getTheme(context);
     final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(link: HomePageScreen.url, cache: InMemoryCache()),
+      GraphQLClient(link: HomePageScreen.url, cache: GraphQLCache()),
     );
 
     GraphQLClient graphQLClient =
-        new GraphQLClient(link: HomePageScreen.url, cache: InMemoryCache());
+        new GraphQLClient(link: HomePageScreen.url, cache: GraphQLCache());
 
     return GraphQLProvider(
       client: client,
@@ -91,10 +91,10 @@ class UpdateProfileScreen extends State<UpdateProfile> {
             title: Text("Update Profile"),
           ),
           body: Query(
-            options: QueryOptions(documentNode: gql(_buildQuery())),
+            options: QueryOptions(document: gql(_buildQuery())),
             builder: (QueryResult result,
                 {VoidCallback refetch, FetchMore fetchMore}) {
-              if (result.loading) {
+              if (result.isLoading) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -208,10 +208,9 @@ class UpdateProfileScreen extends State<UpdateProfile> {
           onPressed: () async {
             GraphQLClient _client = GraphQLClient(
                 link: HomePageScreen.url,
-                cache: OptimisticCache(
-                    dataIdFromObject: typenameDataIdFromObject));
+                cache: GraphQLCache());
             QueryResult result = await _client
-                .mutate(MutationOptions(document: _updateMutation()));
+                .mutate(MutationOptions(operationName: _updateMutation()));
 
             if (result.data['UpdateProfile']['id'] != null) {
               final snackBar = SnackBar(content: Text('Profile Updated'));

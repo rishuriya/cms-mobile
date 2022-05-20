@@ -37,7 +37,7 @@ class MessagesTab extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(link: widget.url, cache: InMemoryCache()),
+      GraphQLClient(link: widget.url, cache: GraphQLCache()),
     );
 
     return GraphQLProvider(
@@ -76,10 +76,10 @@ class MessagesTab extends State<Messages> {
         child: Scaffold(
           key: _scaffoldKey,
           body: Query(
-            options: QueryOptions(documentNode: gql(_buildQuery())),
+            options: QueryOptions(document: gql(_buildQuery())),
             builder: (QueryResult result,
                 {VoidCallback refetch, FetchMore fetchMore}) {
-              if (result.loading) {
+              if (result.isLoading) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );

@@ -22,10 +22,10 @@ class MemberDidNotSendTab extends State<MembersDidNotSend> {
     selectedDate = selectedDate.substring(0, 10);
     return Scaffold(
       body: Query(
-        options: QueryOptions(documentNode: gql(_buildQuery())),
+        options: QueryOptions(document: gql(_buildQuery())),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
-          if (result.loading) {
+          if (result.isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );

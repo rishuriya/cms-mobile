@@ -1,3 +1,4 @@
+
 import 'package:cms_mobile/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -16,7 +17,7 @@ class _CMS extends State<CMS> {
   String username;
   String token;
   final HttpLink httpLink = HttpLink(
-    uri: 'https://api.amfoss.in/',
+    'https://api.amfoss.in/',
   );
   @override
   Widget build(BuildContext context) {
@@ -64,9 +65,10 @@ class _CMS extends State<CMS> {
 
     GraphQLClient _client = GraphQLClient(
         link: httpLink,
-        cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject));
-    QueryResult result =
-    await _client.mutate(MutationOptions(document: authMutation));
+        cache: GraphQLCache());
+    final options = MutationOptions(
+        document: gql(authMutation));
+   QueryResult result = await _client.mutate(options);
 
     String refreshedToken = result.data['tokenAuth']['token'];
     return refreshedToken;

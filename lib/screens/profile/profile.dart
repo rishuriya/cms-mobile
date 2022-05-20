@@ -60,11 +60,11 @@ class _Profile extends State<Profile> {
         ),
         body: Query(
           options: QueryOptions(
-            documentNode: gql(_getBuildQuery()),
+            document: gql(_getBuildQuery()),
           ),
           builder: (QueryResult result,
               {VoidCallback refetch, FetchMore fetchMore}) {
-            if (result.loading) {
+            if (result.isLoading) {
               return Center(child: CircularProgressIndicator());
             }
             if (!isConnection) {
@@ -134,7 +134,7 @@ class _Profile extends State<Profile> {
                       padding: EdgeInsets.only(left: 4),
                       margin: EdgeInsets.only(left: 8),
                       child: new Text('${nameList['fullName']}',
-                          style: Theme.of(context).textTheme.headline),
+                          style: Theme.of(context).textTheme.headline1),
                     ),
                     Row(
                       children: <Widget>[
@@ -188,7 +188,7 @@ class _Profile extends State<Profile> {
           new Container(
             margin: const EdgeInsets.only(top: 5.0),
             child: new Text(nameList['about'],
-                style: Theme.of(context).textTheme.subtitle),
+                style: Theme.of(context).textTheme.subtitle1),
           ),
           Divider(color: Colors.black),
           _details(result),

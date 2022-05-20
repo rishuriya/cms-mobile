@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FocusNode _usernameFocus = new FocusNode();
   FocusNode _passwordFocus = new FocusNode();
 
+
   _fieldFocusChange(
       BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final db = Provider.of<AppDatabase>(context, listen: false);
     if (_usernameController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty) {
-      final String authMutation = '''
+     final String authMutation = '''
                         mutation{
                           tokenAuth(username:"${_usernameController.text}", password:"${_passwordController.text}") {
                             token
@@ -42,18 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         ''';
 
       final HttpLink httpLink = HttpLink(
-        uri: 'https://api.amfoss.in/',
+        'https://api.amfoss.in/',
       );
       GraphQLClient _client = GraphQLClient(
           link: httpLink,
-          cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject));
+          cache: GraphQLCache());
       QueryResult result;
       String token;
       try {
-        result = await _client.mutate(MutationOptions(document: authMutation));
+        final options = MutationOptions(
+            document: gql(authMutation));
+        result = await _client.mutate(options);
         token = result.data['tokenAuth']['token'];
         userExist = true;
       } on NoSuchMethodError catch (e) {
+        print('error');
         print(e);
       }
 
@@ -62,11 +66,12 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       final Link link = authLink.concat(httpLink);
       refreshCred = _usernameController.text + " " + _passwordController.text;
-
+  print(token);
       User user = User(
           authToken: token,
           username: _usernameController.text,
           refreshToken: refreshCred);
+      print(user);
       db.getSingleUser().then((userFromDb) {
         if (!userExist) {
           Toast.show("Invalid username or password", context,

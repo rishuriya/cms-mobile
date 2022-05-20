@@ -42,7 +42,7 @@ class _MessagesList extends State<UserUpdates> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
-      GraphQLClient(link: HomePageScreen.url, cache: InMemoryCache()),
+      GraphQLClient(link: HomePageScreen.url, cache: GraphQLCache()),
     );
 
     return GraphQLProvider(
@@ -61,10 +61,10 @@ class _MessagesList extends State<UserUpdates> {
           ],
         ),
         body: Query(
-          options: QueryOptions(documentNode: gql(_buildQuery())),
+          options: QueryOptions(document: gql(_buildQuery())),
           builder: (QueryResult result,
               {VoidCallback refetch, FetchMore fetchMore}) {
-            if (result.loading) {
+            if (result.isLoading) {
               return Center(
                 child: CircularProgressIndicator(),
               );

@@ -26,10 +26,10 @@ class AttendancePresent extends State<MembersPresent> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Query(
-        options: QueryOptions(documentNode: gql(_buildQuery())),
+        options: QueryOptions(document: gql(_buildQuery())),
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
-          if (result.loading) {
+          if (result.isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
